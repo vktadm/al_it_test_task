@@ -12,4 +12,5 @@ class PoligonModelSerializer(serializers.ModelSerializer):
         model = PolygonModel
         fields = ("id", "name", "poly", "antemeridian")
 
-    # def get_poly():
+    # def get_poly(self, obj):
+    #     return f"{obj.poly[0][0:4]}"
