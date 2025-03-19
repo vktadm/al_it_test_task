@@ -1,12 +1,20 @@
-from rest_framework import viewsets, status
 from django.shortcuts import get_object_or_404, _get_queryset
+from django.contrib.auth.models import User
+from rest_framework import viewsets, status, generics
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from .models import PolygonModel
-from .serializers import PoligonModelSerializer
+from .serializers import PolygonModelSerializer, UserSerializer
 
 
-class Polygon(viewsets.ViewSet):
+class CreateUserView(generics.CreateAPIView):
+    queryset = _get_queryset(User)
+    serializer_class = UserSerializer
+    permission_classes = [AllowAny]
+
+
+class PolygonView(generics.CreateAPIView):  # viewsets.ViewSet
     """Представление для PolygonModel"""
 
     queryset = _get_queryset(PolygonModel)
@@ -14,18 +22,18 @@ class Polygon(viewsets.ViewSet):
     def list(self, request):
         """Получить все объекты."""
         queryset = _get_queryset(PolygonModel)
-        serializer = PoligonModelSerializer(queryset, many=True)
+        serializer = PolygonModelSerializer(queryset, many=True)
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
         """Получить объект по id."""
         item = get_object_or_404(PolygonModel, pk=pk)
-        serializer = PoligonModelSerializer(item)
+        serializer = PolygonModelSerializer(item)
         return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
         """Создать объект."""
-        serializer = PoligonModelSerializer(data=request.data)
+        serializer = PolygonModelSerializer(data=request.data)
         if serializer.is_valid():
             try:
                 serializer.save()

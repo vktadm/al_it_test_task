@@ -1,12 +1,8 @@
 from django.db import connection
-from django.contrib.gis.geos import Polygon
 
 
-def sql_qwery(polygon: str) -> list[dict] | None:
-    try:
-        polygon = Polygon()
-    conn = connection()
-    cursor = conn.cursor()
+def sql_qwery(polygon):
+    cursor = connection.cursor()
     cursor.execute(
         """SELECT 
                 id, 
@@ -24,9 +20,3 @@ def sql_qwery(polygon: str) -> list[dict] | None:
     )
     result = cursor.fetchall()
     return result
-
-
-# poly = "SRID=4326; POLYGON ((28 53, 31 53, 30 52, 28 52, 28 53))"
-# print(poly)
-#
-# print(sql_qwery(poly))

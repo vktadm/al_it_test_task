@@ -6,8 +6,14 @@ from .db_helper import sql_qwery
 
 
 @api_view(["GET"])
-def check_polygon(request, polygon: str):
-    polygons = sql_qwery(polygon)
-    if polygons:
-        return Response({"message:": f"{polygons}"})
-    return Response({"message:": f"No content"}, status=status.HTTP_204_NO_CONTENT)
+def check_polygon(request):
+    """Находит координаты пересечения с существующими полигонами."""
+    if request.data:
+        try:
+            polygons = sql_qwery(request.data["polygon"])
+        except Exception as e:
+            return Response(data=f"ERROR: {e}", status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(data=polygons)
+
+    return Response(data=False)

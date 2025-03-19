@@ -1,4 +1,5 @@
 from pathlib import Path
+from datetime import timedelta
 
 # Библиотека для работы с переменными .env
 from environs import Env
@@ -18,11 +19,26 @@ env.read_env()
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env("SECRET_KEY_BACKEND1")
 
+ALLOWED_HOSTS = ["*"]
+
+REST_FRAMEWORK = {
+    # Default authentication classes
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ],
+    # Default permission classes
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+}
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -33,10 +49,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "api",
     "rest_framework",
+    "corsheaders",
     "django.contrib.gis",
     "leaflet",
-    "api",
 ]
 
 MIDDLEWARE = [
@@ -47,6 +64,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = "backend1.urls"
@@ -130,3 +148,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Путь к gdl и geos
 GDAL_LIBRARY_PATH = "/opt/homebrew/opt/gdal/lib/libgdal.dylib"
 GEOS_LIBRARY_PATH = "/opt/homebrew/opt/geos/lib/libgeos_c.dylib"
+
+
+CORS_ALLOW_ALL_ORIGINS = True  # Разрешает запросы от всех доменов
+CORS_ALLOW_CREDENTIALS = True  # Разрешает отправку cookies и авторизационных данных
