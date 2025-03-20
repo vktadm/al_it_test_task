@@ -1,5 +1,5 @@
 from django.contrib.gis.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
 
 class PolygonModel(models.Model):
@@ -8,6 +8,7 @@ class PolygonModel(models.Model):
     name = models.CharField(max_length=100)
     poly = models.PolygonField()
     antemeridian = models.BooleanField()
+    users = models.ManyToManyField("UserModel", through="UserPolygonModel")
 
     class Meta:
         verbose_name = "Полигон"
@@ -17,10 +18,14 @@ class PolygonModel(models.Model):
         return self.name
 
 
-class UserPolygon(models.Model):
+class UserModel(AbstractUser):
+    polygons = models.ManyToManyField("PolygonModel", through="UserPolygonModel")
+
+
+class UserPolygonModel(models.Model):
     """Промежуточную таблица для User и PolygonModel."""
 
-    creator = models.ForeignKey(User, on_delete=models.CASCADE)
+    creator = models.ForeignKey(UserModel, on_delete=models.CASCADE)
     polygon = models.ForeignKey(PolygonModel, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -33,4 +38,4 @@ class UserPolygon(models.Model):
         return f"{self.get_creator_name()} - {self.created_at}"
 
     def get_creator_name(self):
-        return User.objects.get(pk=self.creator.id)
+        return UserModel.objects.get(pk=self.creator.id)

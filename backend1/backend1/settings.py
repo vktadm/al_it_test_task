@@ -152,3 +152,5 @@ GEOS_LIBRARY_PATH = "/opt/homebrew/opt/geos/lib/libgeos_c.dylib"
 
 CORS_ALLOW_ALL_ORIGINS = True  # Разрешает запросы от всех доменов
 CORS_ALLOW_CREDENTIALS = True  # Разрешает отправку cookies и авторизационных данных
+
+AUTH_USER_MODEL = "api.UserModel"

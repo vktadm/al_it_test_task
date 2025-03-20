@@ -1,21 +1,20 @@
 from rest_framework import serializers
 
-from .models import PolygonModel
-from django.contrib.auth.models import User
+from .models import PolygonModel, UserModel
 
 
 class UserSerializer(serializers.ModelSerializer):
     """Сериализатор для модели User."""
 
     class Meta:
-        model = User
+        model = UserModel
         fields = ["id", "username", "password"]
         extra_kwargs = {
             "password": {"write_only": True},  # Поле не отображается при чтении
         }
 
     def create(self, validated_data):
-        user = User.objects.create_user(**validated_data)
+        user = UserModel.objects.create_user(**validated_data)
         return user
 
 
@@ -26,7 +25,7 @@ class PolygonModelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PolygonModel
-        fields = ("id", "name", "poly", "antemeridian")
+        fields = ("id", "name", "poly", "antemeridian", "users")
 
     # def get_poly(self, obj):
     #     return f"{obj.poly[0][0:4]}"
