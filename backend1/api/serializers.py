@@ -1,6 +1,7 @@
 from rest_framework import serializers
+from rest_framework_gis.serializers import GeoModelSerializer
 
-from .models import PolygonModel, UserModel
+from .models import PolygonModel, UserModel, UserPolygonModel
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -18,14 +19,10 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
-class PolygonModelSerializer(serializers.ModelSerializer):
+class PolygonModelSerializer(GeoModelSerializer):
     """Сериализатор для модели PolygonModel."""
-
-    # poly = serializers.SerializerMethodField()
 
     class Meta:
         model = PolygonModel
+        geo_field = "poly"
         fields = ("id", "name", "poly", "antemeridian", "users")
-
-    # def get_poly(self, obj):
-    #     return f"{obj.poly[0][0:4]}"

@@ -1,0 +1,4 @@
+.leaflet-container {
+  height: 500px; /* Example fixed height */
+  width: 100%;   /* Full parent width */
+}
