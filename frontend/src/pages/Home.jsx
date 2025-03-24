@@ -34,7 +34,7 @@ function Home() {
       if (!isNaN(parseFloat(latitude)) && isFinite(latitude)) {
         if (!isNaN(parseFloat(longitude)) && isFinite(longitude)) {
           setCoordinates(
-            (prevValue) => prevValue + latitude + " " + longitude + "\n"
+            (prevValue) => prevValue + latitude + ", " + longitude + "\n"
           );
           setLongitudeValue("");
           setLatitudeValue("");
@@ -112,10 +112,10 @@ function Home() {
           id="coordinates"
           name="coordinates"
           required
-          readOnly
+          // readOnly
           value={coordinates}
           rows="6"
-          // onChange={(e) => setCoordinates(e.target.value)}
+          onChange={(e) => setCoordinates(e.target.value)}
         ></textarea>
         <br />
         <div>

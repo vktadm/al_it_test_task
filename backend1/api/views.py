@@ -1,11 +1,13 @@
-from django.shortcuts import get_object_or_404, _get_queryset
+from django.shortcuts import _get_queryset
 from django.contrib.auth.models import User
 from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
-from .models import UserModel, PolygonModel, UserPolygonModel
+from .models import PolygonModel
 from .serializers import PolygonModelSerializer, UserSerializer
+
+from .dependencies import check_polygon
 
 
 class CreateUserView(generics.CreateAPIView):
@@ -26,8 +28,8 @@ class PolygonListCreate(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         if serializer.is_valid():
             try:
+                # check_polygon(serializer.data)
                 serializer.save()
-                # TODO polygon.users.add(self.request.user.id)
             except Exception as e:
                 return Response(f"ERROR: {e}", status=status.HTTP_400_BAD_REQUEST)
 
